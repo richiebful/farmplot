@@ -15,7 +15,7 @@ export function JSONFeatureStack(mapLayer, json) {
     return stack;
 }
 //potentially replace with call to FileReader API
-function fetchJSON(url, callback){
+function fetchJSON(url, done){
     new Promise(function (resolve, reject) {
         // Standard XHR to load an image
         var request = new XMLHttpRequest();
@@ -25,24 +25,24 @@ function fetchJSON(url, callback){
         request.onload = function () {
             if (request.status === 200) {
                 // If successful, resolve the promise by passing back the request response
-                resolve(request.response);
+                resolve(request.response)
             } else {
                 // If it fails, reject the promise with a error message
-                reject(Error('File didn\'t load successfully; error code:' + request.statusText));
+                throw new Error(request.statusText)
             }
         };
-        request.onerror = function () {
+        request.onerror = function (err) {
             // Also deal with the case when the entire request fails to begin with
             // This is probably a network error, so reject the promise with an appropriate message
-            reject(Error('There was a network error.'));
+            throw err;
         };
         // Send the request
         request.send();
-    }).then( function(){
-        callback();
-    }).catch(function(Error){
-        console.log(Error);
-    });
+    }).then((result) => {
+        return done()
+    }).catch((err) => {
+
+    })
 }
 
 var StackPrototype = {

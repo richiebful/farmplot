@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" type="text/css" href="../../assets/css/bootstrap.css" />
+        <!--<link href="https://fonts.googleapis.com/css?family=Cantarell" rel="stylesheet">-->
+        <style>
+                /*#login-box {
+                        margin: auto auto;
+                        top: 200px;
+                        height: 400px;
+                        width: 500px;
+                        background-color: darkgreen;
+                        opacity: .90;
+                        position: relative;
+                }
+
+                #login-box-title{
+                        color: white;
+                        font-family: "Cantarell", sans-serif;
+                        font-weight: normal;
+                        font-size: 20pt;
+                }*/
+        </style>
+
+</head>
+<body>
+        <div id="login-box">
+                <form action="/signup" accept-charset="utf-8" method="post">
+                        <div id="login-box-title">
+                                Signup
+                        </div>
+                        <div>
+                                {{errorMessage}}
+                        </div>
+                        <div id="email-field-errors">
+                                {{emailError}}
+                        </div>
+                        <fieldset>
+                                <label for="email-field">Email</label>
+                                <input type="email" name="email" id="email-field" tabindex="1" class="text-input" autocorrect="off" autocapitalize="off">
+                        </fieldset>
+                        <div id="password-field-errors">
+                                {{passwordError}}
+                                <span id="password-contain">Passwords must contain:
+                                        <ul> 
+                                                <li id="password-contain-lower">a lowercase</li>
+                                                <li id="password-contain-upper">an uppercase</li>
+                                                <li id="password-contain-number">a number</li>
+                                                <li id="password-contain-symbol">a symbol</li>
+                                        </ul>
+                                        <span id="password-length">and be 12 to 255 characters long.</span>
+                                </span>
+                        </div>
+                        <fieldset>
+                                <label for="password-field">Password</label>
+                                <input type="password" name="password" id="password-field" tabindex="2" class="text-input"/>
+                        </fieldset>
+                        <div id="password2-field-errors">
+                                {{password2Error}}
+                        </div>
+                        <fieldset>
+                                <label for="password2-field">Confirm password</label>
+                                <input type="password" name="password2" id="password2-field" tabindex="3" class="text-input"/>
+                        </fieldset>
+                        <input class="btn" type="submit" value="Login" tabindex="4">
+                </form>
+        </div>
+</body>
+</html>

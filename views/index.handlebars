@@ -3,55 +3,53 @@
 
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="./app/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css" />
     <link href="https://fonts.googleapis.com/css?family=Cantarell" rel="stylesheet"> 
     <style>
         #jumbotron-image {
-            background: transparent url('../assets/img/cropRows.png') center top;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-            min-height: 650px;
-            overflow: hidden;
             position: relative;
             width: 100%;
         }
 
-        .jumbotron-text {
+        #jumbotron-image img {
+            width: 100%;
+            opacity: 1;
+        }
+
+        #jumbotron-text {
             left: 0;
             position: absolute;
             text-align: center;
+            top: 180px;
             width: 100%;
             color: white;
-            font-weight: regular;
-        }
-
-        #jumbotron-large{
-            top: 180px;
             font-size: 75px;
-            font-family: Cantarell;
-        }
-
-        #jumbotron-small{
-            top: 300px;
-            font-size: 40px;
+            font-weight: regular;
             font-family: Cantarell;
         }
 
         #jumbotron-jump {
-            top: 500px;
+            left: 0;
+            position: absolute;
+            text-align: center;
+            top: 350px;
+            width: 100%;
+            color: white;
             font-size: 50px;
         }
 
         #jumbotron-brand {
+            position: absolute;
+            text-align: center;
             top: 75px;
+            left: 0;
+            width: 100%;
+            color: white;
             font-size: 75px;
-            font-family: Cantarell;
         }
 
         #descLoginFrame{
              background-color: #333;
-             height: 1000px;
         }
 
         #loginFrame{
@@ -111,47 +109,29 @@
             text-decoration: underline;
         }
     </style>
-    <script type="text/javascript">
-        window.onload = function(){
-            document.getElementById("toggleLoginBox").onclick = function(event){
-                var changeToSignup = event.target.getAttribute("data-tosignup");
-                if (changeToSignup === "false"){
-                    console.log("display login");
-                    return false;
-                }
-                else if (changeToSignup === "true"){
-                    console.log("display signup");
-                    return false;
-                }
-                else{
-                    return false;
-                }
-            };
-        }
-    </script>
 </head>
 
 <body>
     <div id="jumbotron-image">
-        <span class="jumbotron-text" id="jumbotron-brand">Logo</span>
-        <span class="jumbotron-text" id="jumbotron-large">Data-driven sustainable farming</span>
-        <span class="jumbotron-text" id="jumbotron-small">Plan. Track. Optimise. Harvest.<br>Your farm data hub.</span>
-        <div onclick="window.scrollTo(0, document.getElementById('jumbotron-image').scrollHeight);"><span id="jumbotron-jump" class="glyphicon glyphicon-chevron-down jumbotron-text"></span></div>
+        <img src="/img/cropRows.png" width="100%">
+        <span id="jumbotron-brand">Logo</span>
+        <span id="jumbotron-text">Data-driven sustainable farming</span>
+        <div onclick="window.scrollBy(0, window.innerHeight);"><span id="jumbotron-jump" class="glyphicon glyphicon-chevron-down"></span></div>
         </div>
         <div class="row" id="descLoginFrame">
             <div class="col-md-8">Description box</div>
-            <div id="loginSidebar" class="col-md-4">
+            <div class="col-md-4" id="loginFrame">
                     <div id="loginOrSignup">
                         <span class="loginTitle">Login</span>
-                        <a id="toggleLoginBox" data-tosignup="true">Signup</a>
+                        <a id="signupTitle">Signup</a>
                     </div>
-                    <form action="/session" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="GOetjc48dqqMGrdoVwaDoBk8FVSLfkia3WTpx6CXhsWWQm6KEfCzfiv1LBzfdwE+YoYMDBICCDst7k4NIz59+w=="
-                        />
+                    <form action="/login" accept-charset="UTF-8" method="post">
+                        <input type="hidden" name="authenticity_token" value={{authenticity_token}}/>
                         <input type="hidden" name="return_to" id="return_to" value="" />
 
                         <fieldset>
-                            <label for="email">Email</label>
-                            <input type="text" name="email" id="email" tabindex="1" class="text-input" autocorrect="off" autocapitalize="off" />
+                            <label for="login">Username</label>
+                            <input type="text" name="login" id="login" tabindex="1" class="text-input" autocorrect="off" autocapitalize="off" />
                         </fieldset>
 
                         <fieldset>
@@ -161,7 +141,7 @@
 
                         <input class="btn btn-olive" type="submit" value="Sign In" tabindex="3" />
                     </form>
-            </div>
+        </div>
     </div>
 </body>
 </html>

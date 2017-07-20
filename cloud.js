@@ -1,64 +1,36 @@
 const fs = require("fs")
+const path = require("path")
 
-const ROOT_DIRECTORY = "./private/"
+const ROOT_DIRECTORY = path.join(__dirname, 'private')
 
 function initUserFolder(uid, callback) {
-        const pathToFolder = ROOT_DIRECTORY + uid
-        return new Promise((resolve, reject) => {
-                fs.exists(CLOUD_ROOT + uid, (exists) => {
-                        if (!exists) {
-                                fs.mkdir(CLOUD_ROOT + uid, (err) => {
-                                        if (err)
-                                                reject()
-                                        else
-                                                resolve(err)
-                                })
-                        }
-                        else {
-                                reject(null)
-                        }
-                })
-        })
+        pathToFolder = path.join(ROOT_DIRECTORY, uid.toString())
+        fs.mkdir(pathToFolder, callback)
 }
 
-function readFile(uid, filename) {
-        const pathToFile = ROOT_DIRECTORY + uid + "/" + filename + ".json"
-        return new Promise((resolve) => {
-                fs.readFile(pathToFile, (err, contents) => {
-                        if (err)
-                                throw err
-                        else
-                                resolve(contents)
-                })
-        })
+function readFile(uid, filename, callback) {
+        const pathToFile = path.join(ROOT_DIRECTORY, uid.toString(), filename + ".json")
+        fs.readFile(pathToFile, callback)
 }
 
-function createOrOverwriteFile(uid, filename, contents){
-        const pathToFile = ROOT_DIRECTORY + uid + "/" + filename + ".json"
-        return new Promise((resolve) => {
-                fs.writeFile(pathToFile, contents, (err) => {
-                        if (err) 
-                                throw err
-                        else
-                                resolve()
-                })
-        })
+function sendFile(res, uid, filename, callback){
+        const pathToFile = path.join(ROOT_DIRECTORY, uid.toString(), filename + ".json")
+        res.sendFile(pathToFile, callback)
 }
 
-function removeFile(uid, filename){
-         const pathToFile = ROOT_DIRECTORY + uid + "/" + filename + ".json"
-         return new Promise((resolve) => {
-                 fs.unlink(pathToFile, (err) => {
-                        if (err)
-                                throw err
-                        else
-                                resolve()
-                 })
-         })
+function createOrOverwriteFile(uid, filename, contents, callback){
+        const pathToFile = path.join(ROOT_DIRECTORY, uid.toString(), filename + ".json")
+        fs.writeFile(pathToFile, contents, callback)
+}
+
+function removeFile(uid, filename, callback){
+        const pathToFile = path.join(ROOT_DIRECTORY, uid.toString(), filename + ".json")
+        fs.unlink(pathToFile, callback)
 }
 
 module.exports = {
         readFile,
+        sendFile,
         createOrOverwriteFile,
         removeFile,
         initUserFolder

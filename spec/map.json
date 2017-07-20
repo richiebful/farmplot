@@ -1,0 +1,67 @@
+[
+        //this shows potential types of GeoJSON objects for this app
+        {
+                "object-type": "crop-area",
+                "type": "polygon",
+                "properties": {
+                        "lastModified": 0,
+                        "lastViewed": 0,
+                        "id": 0,
+                        "cropType": {
+                                "code": "number",
+                                "commonName": "string",
+                                "variety": {
+                                        "inDatabase": "boolean",
+                                        "name": "string",
+                                        "description": "string",
+                                        "daysToMaturity": "string",
+                                        "resistance": "string",
+                                        "others": "string"
+                                }
+                        },
+                        "soilTests": [
+                                "test-code1",
+                                "test-code2",
+                                "etc..."
+                        ],
+                        "soilSurveyRasters": [
+                                "survey-code1",
+                                "survey-code2",
+                                "etc..."
+                        ]
+                }
+        },
+        {
+                "type": "point",
+                "long-lat": 9,
+                "properties":{
+                        "type": "soil-test",
+                        "lastModified": 0,
+                        "lastViewed": 0,
+                        "id": 0,
+                        "measurements": {
+                                "N": {
+                                        "quantity": 0,
+                                        "units": "lb/A"
+                                }
+                        }
+                }
+        },
+        {
+                "type": "point",
+                "long-lat": 9,
+                "properties":{
+                        "id": 0,
+                        "type": "soil-survey",
+                        "survey-date": 0,
+                        "soilType": "name",
+                        "measurments":{
+                                "drainage": "poor/good/excellent",
+                                "clay": "40", //pct
+                                "silt": "50",
+                                "sand": "10",
+                                "grade": "10"
+                        }
+                }
+        }
+]

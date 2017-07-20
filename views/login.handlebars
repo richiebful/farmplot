@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" type="text/css" href="../../assets/css/bootstrap.css" />
+        <!--<link href="https://fonts.googleapis.com/css?family=Cantarell" rel="stylesheet">-->
+        <style>
+                /*#login-box {
+                        margin: auto auto;
+                        top: 200px;
+                        height: 400px;
+                        width: 500px;
+                        background-color: darkgreen;
+                        opacity: .90;
+                        position: relative;
+                }
+
+                #login-box-title{
+                        color: white;
+                        font-family: "Cantarell", sans-serif;
+                        font-weight: normal;
+                        font-size: 20pt;
+                }*/
+        </style>
+
+</head>
+<body>
+        <div id="login-box">
+                <form action="/login" accept-charset="utf-8" method="post">
+                        <div id="login-box-title">
+                                Login
+                        </div>
+                        <div id="error-message">
+                                {{errorMessage}}
+                        </div>
+                        <fieldset>
+                                <label for="email-field">Email</label>
+                                <input type="email" name="email" id="email-field" tabindex="1" class="text-input" autocorrect="off" autocapitalize="off">
+                        </fieldset>
+                        <fieldset>
+                                <label for="password-field">Password</label>
+                                <input type="password" name="password" id="password-field" tabindex="2" class="text-input"/>
+                        </fieldset>
+                        <input class="btn" type="submit" value="Login" tabindex="4">
+                </form>
+        </div>
+</body>
+</html>

@@ -1,160 +1,160 @@
 const mysql = require("mysql");
 const crypto = require("crypto");
-const extend = require("underscore").extend;
-const cloud = require("./cloud.js")
-const mysqlConnection = require("./config.js").mysqlConnection
+const pool = require("./config.js").pool
+const db = require("./db.js")
 require("date-utils");
 
 const SALT_ITERATIONS = 10000;
 const HASH_BYTE_LENGTH = 64;
 
-function asyncSignup(req, res) {
-        req.checkBody('email', 'Email is invalid').isEmail();
-        req.checkBody('password', "Password must be at least 12 characters").isLength({ min: 12, max: 255 });
-        req.checkBody('password', "Passwords don't match").equals(req.body.password2);
+/**
+ * Creates a new user with the specified email/password combo
+ * 
+ * @param {String} email 
+ * @param {String} password 
+ * @param {Function} done 
+ */
 
-        return new Promise((resolve) => {
-                req.getValidationResult().then((result) => {
-                        if (!result.isEmpty()) {
-                                throw result.array()[0];
-                        }
-                        else {
-                                newUser(req.body.email, req.body.password).then((user) => {
-                                        user.addToDatabase().then((success) => {
-                                                resolve(user)
-                                        }).catch((err) => {
-                                                throw err;
-                                        });
-                                }).catch((err) => {
-                                        throw err;
-                                });
-                        }
-                })
-        })
-}
+function signup(email, password, done) {
+        db.Users.selectByEmail(email, (err, user) => {
+                if (err) {
+                        return done(err)
+                }
+                else if (user) {
+                        //@todo html escape email
+                        return done(null, false, "User already exists with " + email)
+                }
 
-function signupUserErrors(error, res) {
-        res.send("signupError")
-}
-
-function newUser(email, password) {
-        return new Promise((resolve, reject) => {
                 const salt = crypto.randomBytes(16)
                 crypto.pbkdf2(password, salt, SALT_ITERATIONS, HASH_BYTE_LENGTH, 'sha512', (err, hash) => {
-                        if (err) throw err;
-                        resolve(extend(Object.create(userPrototype), {
+                        if (err)
+                                return done(err);
+                        let user = Object.assign(Object.create(userPrototype), {
                                 email,
                                 password: hash,
                                 salt,
                                 confirmation_token: crypto.randomBytes(32),
                                 token_expiration: new Date().addHours(24)
-                        }));
+                        })
+
+                        console.log(user)
+
+                        db.Users.insert(user, function (err) {
+                                if (err)
+                                        return done(err)
+
+                                return done(null, true)
+                        })
+                })
+        })
+}
+
+
+/**
+ * 
+ * @param {String} email 
+ * @param {String} password 
+ * @param {Function} done 
+ */
+function login(email, password, done) {
+        db.Users.selectByEmail(email, (err, user) => {
+                if (err)
+                        return done(err)
+                else if (!user)
+                        return done(null, false, messages.email_password_invalid)
+                else if (user.email_confirmed === false)
+                        return done(null, false, messages.email_not_confirmed)
+
+                user = Object.assign(Object.create(userPrototype), user)
+                crypto.pbkdf2(password, new Buffer(user.salt, 'utf8'), SALT_ITERATIONS, HASH_BYTE_LENGTH, 'sha512', (err, hash) => {
+                        if (err)
+                                return done(err)
+                        else if (crypto.timingSafeEqual(hash, user.password))
+                                return done(null, user)
+                        else
+                                return done(null, false, messages.email_password_invalid)
                 });
-        });
+        })
 }
 
-function confirmUserWithToken(token, callback){
-        var conn = mysql.createConnection(mysqlConnection);
-
-        const addNewUserQuery = "UPDATE Users SET email_confirmed = true, confirmation_token=NULL, token_expiration=NULL WHERE confirmation_token = ? AND token_expiration < ?";
-        var query = conn.query(addNewUserQuery, [token, new Date()], function (err, results) {
+/**
+ * Confirm user's email
+ * 
+ * @param {Buffer} token 
+ * @param {Number} uid 
+ * @param {Function} done 
+ */
+function confirm(token, uid, done) {
+        db.Users.selectByToken(token, (err, user) => {
                 if (err)
-                        callback(err, false)
-                else if (results.changedRows > 0)
-                        callback(null, true)
-                else
-                        callback(null, false)
-        });
-        console.log(query.sql)
+                        return done(err)
+                else if (!user)
+                        return done(null, false, messages.token_not_exist)
+                else if (user.email_confirmed === true)
+                        return done(null, false, messages.email_confirmed)
+                else if (user.token_expiration < new Date())
+                        return done(null, false, messages.token_expired)
 
-        conn.end();
+                db.Users.confirmEmail(token, uid, function (err) {
+                        if (err)
+                                return done(err)
+
+                        return done(null, true)
+                })
+        })
+}
+/**
+ * Begins the user session for the given user
+ * 
+ * @param {userPrototype} user 
+ * @param {Function} done 
+ */
+function serializeUser(user, done) {
+        return done(null, user.id)
 }
 
-confirmUserWithToken(new Buffer("RichardFulop"), () =>{console.log("done")})
-
-function getUserByEmail(email, callback) {
-        var conn = mysql.createConnection(mysqlConnection);
-
-        const addNewUserQuery = "SELECT * FROM Users WHERE email = ?";
-        conn.query(addNewUserQuery, [email], function (err, results) {
-                if (err)
-                        callback(err, null)
-                else if (results[0] && results[0].email_confirmed == true)
-                        callback(null, extend(Object.create(userPrototype), results[0]))
-                else if (results[0])
-                        callback(new Error("ERR_EMAIL_NOT_CONFIRMED"), null)
-                else
-                        callback(null, null)
-        });
-
-        conn.end();
+/**
+ * Ends the user session with the given id
+ * 
+ * @param {string} id 
+ * @param {Function} done 
+ */
+function deserializeUser(id, done) {
+        db.Users.selectById(id, (err, user) => {
+                return done(err, user)
+        })                        
 }
 
 var sessionPrototype = {
-        user_id: null, //int
         session_id: null, //int
         expires: null, //int(11) unsigned
         data: null //text
 }
 
 var userPrototype = {
+        id: null,
         username: "",
         password: null,
         salt: null,
         confirmation_token: null,
         token_expiration: null,
         email: "",
-        addToDatabase: function addToDatabase() {
-                return new Promise((resolve, reject) => {
-                        var conn = mysql.createConnection(mysqlConnection);
-
-                        const addNewUserQuery = "INSERT INTO Users (email, password, salt, confirmation_token) VALUES(?, ?, ?, ?)";
-                        const queryParams = [this.email, this.password, this.salt, this.password]
-                        var query = conn.query(addNewUserQuery, queryParams, function (err, results) {
-                                if (err) throw err;
-                                else {
-                                        resolve(results);
-                                }
-                        });
-
-                        conn.end();
-                });
-        },
-        validPassword: function validPassword(attempt) {
-                return new Promise((resolve, reject) => {
-                        crypto.pbkdf2(attempt, this.salt, SALT_ITERATIONS, HASH_BYTE_LENGTH, 'sha512', (err, hash) => {
-                                if (err) throw err;
-                                console.log(this.password)
-                                console.log(hash)
-                                resolve(crypto.timingSafeEqual(hash, this.password))
-                        });
-                });
-        }
+        email_confirmed: false
 };
 
-/*newUser("user2@domain.com", "password").then((user) => {
-    console.log(user.password.length)
-    user.addToDatabase().then((result) => {
-        console.log(result);
-    })
-})*/
-
-
-/*getUserByEmail("user2@domain.com").then((user) => {
-    user.validPassword("failure").then((result) => {
-        console.log(result);
-    })
-    user.validPassword("password").then((result) => {
-        console.log(result);
-    })
-})*/
-
-module.exports = {
-        asyncSignup,
-        userPrototype,
-        getUserByEmail,
-        defaultConnection,
-        confirmUserWithToken
+var messages = {
+        email_not_confirmed: "You haven't confirmed your email yet! If you haven't gotten your confirmation message yet, enter your email in again below to resend.",
+        email_password_invalid: "Email or password invalid",
+        email_confirmed: "You've already confirmed your email! Try to sign in below.",
+        token_expired: "Sorry, your confirmation link has expired after 24 hours. Please try sending another below.",
+        token_not_exist: "Sorry, you gave us an invalid token...have you tried signing up yet?"
 }
 
-//createNewUser("richardbfulop@gmail.com", "thisPwdGreat")
+module.exports = {
+        signup,
+        login,
+        confirm,
+        serializeUser,
+        deserializeUser,
+        messages
+}

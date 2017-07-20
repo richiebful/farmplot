@@ -1,0 +1,6 @@
+{
+        "author": "required.string",
+        "hasGeoJSON": "required.boolean",
+        "hasInventory": "required.boolean",
+        "hasCalendar": "required.boolean"
+}
