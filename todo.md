@@ -1,3 +1,4 @@
-- make sure user access is properly authenticated across pages
-        + resolve "TypeError: this.req.sessionStore.set is not a function": occurs when express-session     is initialized
-- write integration for file fetching
+- test user authentication
+- test map post routes
+- put right-justified "Last saved 10s ago" on toolbar as a reminder for autosave indicator
+- maybe using some list-oriented material-ui component would help with form development

@@ -5,18 +5,17 @@ export function Stack(options) {
 }
 
 export function JSONFeatureStack(mapLayer, json) {
-    let stack = Stack();
+    let stack = Stack()
     if (data["features"] == null){
-        return null;
+        return null
     }
     data["features"].foreach(function (feature) {
-        stack.add(JSONFeature(feature, mapLayer));
-    });
+        stack.add(JSONFeature(feature, mapLayer))
+    })
     return stack;
 }
 //potentially replace with call to FileReader API
-function fetchJSON(url, done){
-    new Promise(function (resolve, reject) {
+export function fetchJSON(url, done){
         // Standard XHR to load an image
         var request = new XMLHttpRequest();
         request.open('GET', url);
@@ -25,24 +24,19 @@ function fetchJSON(url, done){
         request.onload = function () {
             if (request.status === 200) {
                 // If successful, resolve the promise by passing back the request response
-                resolve(request.response)
+                done(null, request.response)
             } else {
                 // If it fails, reject the promise with a error message
-                throw new Error(request.statusText)
+                done(new Error(request.statusText))
             }
         };
         request.onerror = function (err) {
             // Also deal with the case when the entire request fails to begin with
             // This is probably a network error, so reject the promise with an appropriate message
-            throw err;
+            return done(err)
         };
         // Send the request
         request.send();
-    }).then((result) => {
-        return done()
-    }).catch((err) => {
-
-    })
 }
 
 var StackPrototype = {

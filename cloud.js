@@ -9,22 +9,22 @@ function initUserFolder(uid, callback) {
 }
 
 function readFile(uid, filename, callback) {
-        const pathToFile = path.join(ROOT_DIRECTORY, uid.toString(), filename + ".json")
+        const pathToFile = path.join(ROOT_DIRECTORY, uid.toString(), filename)
         fs.readFile(pathToFile, callback)
 }
 
 function sendFile(res, uid, filename, callback){
-        const pathToFile = path.join(ROOT_DIRECTORY, uid.toString(), filename + ".json")
+        const pathToFile = path.join(ROOT_DIRECTORY, uid.toString(), filename)
         res.sendFile(pathToFile, callback)
 }
 
 function createOrOverwriteFile(uid, filename, contents, callback){
-        const pathToFile = path.join(ROOT_DIRECTORY, uid.toString(), filename + ".json")
+        const pathToFile = path.join(ROOT_DIRECTORY, uid.toString(), filename)
         fs.writeFile(pathToFile, contents, callback)
 }
 
 function removeFile(uid, filename, callback){
-        const pathToFile = path.join(ROOT_DIRECTORY, uid.toString(), filename + ".json")
+        const pathToFile = path.join(ROOT_DIRECTORY, uid.toString(), filename)
         fs.unlink(pathToFile, callback)
 }
 

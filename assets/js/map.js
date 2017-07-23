@@ -1,8 +1,7 @@
 import {Stack} from "./stack.js";
 import {Feature} from "./feature.js";
-require("leaflet");
-require("leaflet.pm");
-require("bootstrap");
+require("./leaflet.js")
+require("./leaflet.pm.min.js")
 
 //save geometry on layerGroup and associated data to geoJSON
 var saveDrawingObjs = function(layerGroup){
@@ -10,16 +9,14 @@ var saveDrawingObjs = function(layerGroup){
 	if (drawingObjs == null){
 		drawingObjs = layerGroup.toGeoJSON();
 	}
-};
+}
 
-function render(mapID){
+export function render(mapID){
 	var drawingObjs = Stack();
 	var cropMap = L.map(mapID, {
 		center: [37, 58],
 		zoom: 3
 	});
-
-	console.log("map initialized");
 
 	L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v10/tiles/256/{z}/{x}/{y}?access_token={accessToken}",
 	{
@@ -28,19 +25,8 @@ function render(mapID){
 		accessToken: "pk.eyJ1IjoicmljaGllYmZ1bCIsImEiOiJjaXRocWNhYXYwMnZrMnhudmc2YmczOWZ2In0.-GYJUA4FymhrHdnzznE4RA"
 	}).addTo(cropMap);
 
-	var latlngs = [[37, -109.05],[41, -109.03],[41, -102.05],[37, -102.04]];
-	var polygon = L.polygon(latlngs, {color: 'blue'});
-
-	var latlngs2 = [[42, -109.03],[41, -102.05],[37, -102.04],[37, -109.05]];
-	var polygon2 = L.polygon(latlngs2, {color: 'red'});
-
-	console.log(polygon);
-	console.log(polygon2);
-
-	var mGroup = L.featureGroup([polygon, polygon2]).addTo(cropMap);
+	var mGroup = L.featureGroup().addTo(cropMap);
 	mGroup.pm.enable();
-
-	console.log(polygon);
 
 	cropMap.pm.addControls({
 		drawMarker: true,
@@ -66,5 +52,3 @@ function render(mapID){
 		});
 	});
 };
-
-render("main-map");

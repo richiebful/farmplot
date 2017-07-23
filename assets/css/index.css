@@ -1,0 +1,102 @@
+#jumbotron-image {
+        position: relative;
+        width: 100%;
+}
+
+#jumbotron-image img {
+        width: 100%;
+        opacity: 1;
+}
+
+#jumbotron-text {
+        left: 0;
+        position: absolute;
+        text-align: center;
+        top: 180px;
+        width: 100%;
+        color: white;
+        font-size: 75px;
+        font-weight: regular;
+        font-family: Cantarell;
+}
+
+#jumbotron-jump {
+        left: 0;
+        position: absolute;
+        text-align: center;
+        top: 350px;
+        width: 100%;
+        color: white;
+        font-size: 50px;
+}
+
+#jumbotron-brand {
+        position: absolute;
+        text-align: center;
+        top: 75px;
+        left: 0;
+        width: 100%;
+        color: white;
+        font-size: 75px;
+}
+
+#descLoginFrame{
+        background-color: #333;
+}
+
+#loginFrame{
+        padding: 10px 10px 10px 20px;
+}
+
+#loginFrame-choice{
+        margin: 0 0 5px 0;
+}
+.text-input{
+        width:250px;
+        border:none;
+        border-radius:6px;
+        font:18px "Helvetica Neue", helvetica, sans-serif;
+        padding:8px 10px;
+        margin-right:8px;
+        color:#444;
+        outline:none
+};
+
+#loginFrame{
+        background-color: #808000;
+}
+
+label {
+        display:block;
+        margin:0 0 4px 0;
+        font-size:1.4em;
+        line-height:1;
+        color: white;
+}
+
+fieldset{
+        padding: 10px;
+}
+
+.btn-olive{
+        background-color: #808000;
+        color: white;
+        font-size: 12pt;
+        margin: 15px 10px 10px 10px;
+}
+
+#forgottenPassword{
+        color: #5D5D5B;
+}
+
+#loginOrSignup{
+        color: white;
+        font-size: 20pt;
+        font-weight: bold;
+        font-family: Cantarell;
+}
+
+#signupTitle{
+        color: #5D5D5B;
+        text-decoration: underline;
+}

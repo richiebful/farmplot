@@ -1,0 +1,13 @@
+.column-box{
+        display: flex;
+        flex-flow: row;
+        height: 100%;
+}
+
+.main-column{
+        flex: 1 0 auto;
+}
+
+.sidebar-column{
+        flex: 0 1 350px;
+}

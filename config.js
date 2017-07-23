@@ -68,4 +68,20 @@ config.sessionOptions = {
 
 config.isDebugMode = true;
 
+config.errorMessage = {
+        email_not_confirmed: "You haven't confirmed your email yet! If you haven't gotten your confirmation message yet, enter your email in again below to resend.",
+        email_password_invalid: "Email or password invalid",
+        email_confirmed: "You've already confirmed your email! Try to sign in below.",
+        token_expired: "Sorry, your confirmation link has expired after 24 hours. Please try sending another below.",
+        token_not_exist: "Sorry, you gave us an invalid token...have you tried signing up yet?",
+        email_invalid: "Email invalid",
+        password_too_short: "Password is too short. It must be at least 12 characters long",
+        password_too_long: 'Password is too long. Try to keep it to 255 characters or less',
+        passwords_no_match: "Passwords don\'t match",
+        password_no_lowercase: 'Password doesn\'t contain a lowercase letter',
+        password_no_uppercase: 'Password doesn\'t contain an uppercase letter',
+        password_no_symbol: 'Password doesn\'t contain a symbol',
+        password_no_number: 'Password doesn\'t contain a number',
+}
+
 module.exports = config

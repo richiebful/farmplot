@@ -1,0 +1,18 @@
+html, body{
+        height: 100%;
+        margin: 0;
+}
+
+.box{
+        display: flex;
+        flex-flow: column;
+        height: 100%;
+}
+
+.box .main-row{
+        flex: 1 1 auto;
+}
+
+.box .header-row{
+        flex: 0 1 52px;
+}
