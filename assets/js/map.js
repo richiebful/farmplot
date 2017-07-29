@@ -11,7 +11,7 @@ var saveDrawingObjs = function(layerGroup){
 	}
 }
 
-export function render(mapID){
+export function render(mapID, propsDone){
 	var drawingObjs = Stack();
 	var cropMap = L.map(mapID, {
 		center: [37, 58],
@@ -46,9 +46,13 @@ export function render(mapID){
 	});
 
 	mGroup.getLayers().forEach((layer) => {
-		console.log(layer);
 		layer.on('remove', (e) => {
 			drawingObjs.remove(e.target._leaflet_id);
-		});
+                });
+                
+                layer.on('click', (e) => {
+                        //flesh out getProperties method to search by the proper leaflet_id prop
+                        propsDone(drawingObjs.getProperties(e.layer._leaflet_id))
+                })
 	});
 };

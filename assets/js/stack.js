@@ -69,6 +69,9 @@ var StackPrototype = {
             return this.stack.pop();
         }
     },
+    getProperties: function getProperties(id){
+        return this.stack[key].getProperties()
+    },
     removeProperty: function removeProperty(item, key, value) {
         let foundIndex = this.stack.find(Feature.equals, item);
         if (foundIndex == undefined) {

@@ -1,14 +1,14 @@
 import React from 'react'
-import TextInput from 'material-ui/TextInput'
+import TextField from 'material-ui/TextField'
 
 class Property extends React.Component{
         render(){
                 //if child.isSingleton is set, enable small edit button on right hand side of text
                 let child;
                 if (this.props.editEnabled){
-                        if (this.props.type === "text"){
+                        if (this.props.fieldType === "text"){
                                 child = (
-                                        <TextInput 
+                                        <TextField 
 
                                         />
                                 )
@@ -16,13 +16,13 @@ class Property extends React.Component{
                         //add more types later
                 }
                 else{
-                        child = (<span class="field-display">
-                                        this.props.text
+                        child = (<span className="field-display">
+                                        {this.props.fieldData}
                                  </span>)
                 }
                 return (
-                        <div class="property">
-                                <span class="field-name">
+                        <div className="property">
+                                <span className="field-name">
                                         {this.props.fieldName}
                                 </span>
                                 {child}

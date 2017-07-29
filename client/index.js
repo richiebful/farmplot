@@ -9,11 +9,11 @@ const Index = () => (
     <MapView
         toolbar = {{viewDropDown: {
                         children: [
-                                {primaryText: "Calendar"},
-                                {primaryText: "Home"},
-                                {primaryText: "Inventory"}
+                                {primaryText: "Calendar", link: "/calendar"},
+                                {primaryText: "Map", link: "/map"},
+                                {primaryText: "Inventory", link: "/inventory"}
                         ],
-                        currentViewName: "Home"
+                        currentViewName: "Map"
                    }}}
     />
   </MuiThemeProvider>
